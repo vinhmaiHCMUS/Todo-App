@@ -1,26 +1,49 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>Todo App</h1>
+    <input
+      type="text"
+      v-model="newTodo"
+      @keyup.enter="addTodo"
+      placeholder="Add a new task"
+    />
+
+    <ul>
+      <li v-for="(todo, index) in todos" :key="index">
+        <input
+          type="checkbox"
+          v-model="todo.completed"
+        />
+        <span :class="{ completed: todo.completed }">{{ todo.text }}</span>
+        <button @click="removeTodo(index)">Delete</button>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      newTodo: '',
+      todos: []
+    };
+  },
+  methods: {
+    addTodo() {
+      if (this.newTodo.trim() === '') return;
+      this.todos.push({ text: this.newTodo, completed: false });
+      this.newTodo = '';
+    },
+    removeTodo(index) {
+      this.todos.splice(index, 1);
+    }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.completed {
+  text-decoration: line-through;
 }
 </style>
